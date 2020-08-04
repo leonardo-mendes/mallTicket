@@ -19,7 +19,7 @@ public class UserCheckInServiceImpl implements UserCheckInService {
 
     @Override
     public void registerCheckIn(Integer userId) {
-        Optional.ofNullable(userCheckInRepository.findByUserIdOrderByCreatedAtDesc(userId))
+        Optional.ofNullable(userCheckInRepository.findFirstByUserIdOrderByCreatedAtDesc(userId))
                 .ifPresentOrElse(
                         this::checkNewCheckIn,
                         () ->
@@ -43,6 +43,11 @@ public class UserCheckInServiceImpl implements UserCheckInService {
 
     private boolean moreThan2Minutes(UserCheckIn userCheckIn) {
         return Duration.between(userCheckIn.getCreatedAt(), LocalDateTime.now()).getSeconds() > 120;
+    }
+
+    @Override
+    public Iterable<UserCheckIn> findBetween(LocalDateTime start, LocalDateTime end) {
+        return userCheckInRepository.findByCreatedAtIsBetweenOrderByCreatedAtDesc(start, end);
     }
 
     @Override

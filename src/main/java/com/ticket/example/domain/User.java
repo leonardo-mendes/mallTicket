@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import lombok.*;
 
+@Table(name = "user")
 @Entity
 @Data
 @Builder
@@ -18,5 +19,7 @@ public class User implements Serializable {
     Integer id;
 
     String name;
+
+    @Column(name = "created_at")
     LocalDateTime createdAt;
 }

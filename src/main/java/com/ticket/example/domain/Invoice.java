@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Table(name = "invoice")
 @Entity
 @Data
 @Builder
@@ -22,6 +23,10 @@ public class Invoice implements Serializable {
 
     String number;
     Double value;
-    Integer user;
+
+    @Column(name = "user_id")
+    Integer userId;
+
+    @Column(name = "created_at")
     LocalDateTime createdAt;
 }

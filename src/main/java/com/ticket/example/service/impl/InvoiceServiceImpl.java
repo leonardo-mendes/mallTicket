@@ -39,7 +39,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             e.printStackTrace();
         }
         Invoice invoice = saveInvoice(invoiceRequest);
-        log.info("Created invoice number {}, for user {}.", invoice.getNumber(), invoice.getUser());
+        log.info(
+                "Created invoice number {}, for user {}.",
+                invoice.getNumber(),
+                invoice.getUserId());
         return invoice;
     }
 
@@ -53,7 +56,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 Invoice.builder()
                         .number(invoiceRequest.getNumber())
                         .value(invoiceRequest.getValue())
-                        .user(invoiceRequest.getUser())
+                        .userId(invoiceRequest.getUser())
                         .createdAt(LocalDateTime.now())
                         .build());
     }

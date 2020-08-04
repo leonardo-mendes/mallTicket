@@ -1,12 +1,11 @@
 package com.ticket.example.service;
 
-import com.ticket.example.domain.UserCheckIn;
+import com.ticket.example.resource.response.UserCheckInResponse;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface UserCheckInService {
     void registerCheckIn(Integer userId);
 
-    Iterable<UserCheckIn> findBetween(LocalDateTime start, LocalDateTime end);
-
-    Iterable<UserCheckIn> findAll();
+    List<UserCheckInResponse> findBetween(LocalDateTime start, LocalDateTime end);
 }

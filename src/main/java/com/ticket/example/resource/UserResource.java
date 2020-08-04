@@ -2,10 +2,11 @@ package com.ticket.example.resource;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
-import com.ticket.example.domain.User;
 import com.ticket.example.resource.request.UserRequest;
+import com.ticket.example.resource.response.UserResponse;
 import com.ticket.example.service.UserService;
-import java.util.Optional;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,17 +19,17 @@ public class UserResource {
 
     @PostMapping
     @ResponseStatus(code = CREATED)
-    User insert(@RequestBody UserRequest user) {
+    UserResponse insert(@Valid @RequestBody UserRequest user) {
         return userService.insert(user);
     }
 
     @GetMapping(path = "/{userId}")
-    Optional<User> findById(@PathVariable(value = "userId") final Integer userId) {
+    UserResponse findById(@PathVariable(value = "userId") final Integer userId) {
         return userService.findById(userId);
     }
 
     @GetMapping
-    Iterable<User> findAll() {
+    List<UserResponse> findAll() {
         return userService.findAll();
     }
 }

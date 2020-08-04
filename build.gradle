@@ -16,6 +16,7 @@ repositories {
 ext {
 	springFox = "2.10.5"
 	flyway = "6.5.3"
+	commonsLang = "3.9"
 }
 
 dependencies {
@@ -27,8 +28,11 @@ dependencies {
 	implementation "io.springfox:springfox-swagger-ui:${springFox}"
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	compile "org.flywaydb:flyway-maven-plugin:${flyway}"
+	compile "org.apache.commons:commons-lang3:${commonsLang}"
+
 
 	runtimeOnly 'com.h2database:h2'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

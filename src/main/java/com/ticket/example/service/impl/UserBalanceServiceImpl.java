@@ -1,10 +1,11 @@
 package com.ticket.example.service.impl;
 
 import com.ticket.example.domain.UserBalance;
+import com.ticket.example.error.exceptions.NotFoundException;
 import com.ticket.example.repository.UserBalanceRepository;
+import com.ticket.example.resource.response.UserBalanceResponse;
 import com.ticket.example.service.UserBalanceService;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,17 @@ public class UserBalanceServiceImpl implements UserBalanceService {
     }
 
     @Override
-    public Optional<UserBalance> findByUser(Integer userId) {
-        return userBalanceRepository.findByUserId(userId);
+    public UserBalanceResponse findByUser(Integer userId) {
+        return userBalanceRepository
+                .findByUserId(userId)
+                .map(
+                        userBalance ->
+                                UserBalanceResponse.builder()
+                                        .id(userBalance.getId())
+                                        .balance(userBalance.getBalance())
+                                        .userId(userBalance.getUserId())
+                                        .updatedAt(userBalance.getUpdatedAt())
+                                        .build())
+                .orElseThrow(() -> new NotFoundException(userId.toString()));
     }
 }

@@ -1,13 +1,13 @@
 package com.ticket.example.service;
 
-import com.ticket.example.domain.User;
 import com.ticket.example.resource.request.UserRequest;
-import java.util.Optional;
+import com.ticket.example.resource.response.UserResponse;
+import java.util.List;
 
 public interface UserService {
-    User insert(UserRequest user);
+    UserResponse insert(UserRequest user);
 
-    Optional<User> findById(Integer userId);
+    UserResponse findById(Integer userId);
 
-    Iterable<User> findAll();
+    List<UserResponse> findAll();
 }

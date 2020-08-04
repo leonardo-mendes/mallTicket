@@ -1,11 +1,10 @@
 package com.ticket.example.service;
 
-import com.ticket.example.domain.UserBalance;
-import java.util.Optional;
+import com.ticket.example.resource.response.UserBalanceResponse;
 
 public interface UserBalanceService {
 
     void update(Integer userId, Double value);
 
-    Optional<UserBalance> findByUser(Integer userId) throws Exception;
+    UserBalanceResponse findByUser(Integer userId);
 }

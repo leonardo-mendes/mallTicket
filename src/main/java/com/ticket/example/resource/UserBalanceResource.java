@@ -1,8 +1,7 @@
 package com.ticket.example.resource;
 
-import com.ticket.example.domain.UserBalance;
+import com.ticket.example.resource.response.UserBalanceResponse;
 import com.ticket.example.service.UserBalanceService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +16,7 @@ public class UserBalanceResource {
     private final UserBalanceService userBalanceService;
 
     @GetMapping(path = "/{userId}")
-    Optional<UserBalance> findById(@PathVariable(value = "userId") final Integer userId)
-            throws Exception {
+    UserBalanceResponse findById(@PathVariable(value = "userId") final Integer userId) {
         return userBalanceService.findByUser(userId);
     }
 }

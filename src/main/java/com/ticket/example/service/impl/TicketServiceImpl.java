@@ -21,9 +21,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void insert(TicketRequest ticketRequest) {
-        userService
-                .findById(ticketRequest.getUserId())
-                .ifPresent(user -> insertTicketAndUpdateBalance(user.getId()));
+        insertTicketAndUpdateBalance(userService.findById(ticketRequest.getUserId()).getId());
     }
 
     private void insertTicketAndUpdateBalance(Integer userId) {

@@ -2,10 +2,14 @@ package com.ticket.example.service.impl;
 
 import com.ticket.example.domain.UserCheckIn;
 import com.ticket.example.repository.UserCheckInRepository;
+import com.ticket.example.resource.response.UserCheckInResponse;
 import com.ticket.example.service.UserCheckInService;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,12 +50,19 @@ public class UserCheckInServiceImpl implements UserCheckInService {
     }
 
     @Override
-    public Iterable<UserCheckIn> findBetween(LocalDateTime start, LocalDateTime end) {
-        return userCheckInRepository.findByCreatedAtIsBetweenOrderByCreatedAtDesc(start, end);
-    }
-
-    @Override
-    public Iterable<UserCheckIn> findAll() {
-        return userCheckInRepository.findAll();
+    public List<UserCheckInResponse> findBetween(LocalDateTime start, LocalDateTime end) {
+        return StreamSupport.stream(
+                        userCheckInRepository
+                                .findByCreatedAtIsBetweenOrderByCreatedAtDesc(start, end)
+                                .spliterator(),
+                        false)
+                .map(
+                        userCheckIn ->
+                                UserCheckInResponse.builder()
+                                        .id(userCheckIn.getId())
+                                        .userId(userCheckIn.getUserId())
+                                        .createdAt(userCheckIn.getCreatedAt())
+                                        .build())
+                .collect(Collectors.toList());
     }
 }

@@ -1,14 +1,19 @@
 package com.ticket.example.service.impl;
 
 import com.ticket.example.domain.Invoice;
+import com.ticket.example.error.exceptions.NotFoundException;
 import com.ticket.example.repository.InvoiceRepository;
 import com.ticket.example.resource.request.InvoiceRequest;
+import com.ticket.example.resource.response.InvoiceResponse;
+import com.ticket.example.resource.response.UserResponse;
 import com.ticket.example.service.InvoiceService;
 import com.ticket.example.service.UserBalanceService;
 import com.ticket.example.service.UserCheckInService;
 import com.ticket.example.service.UserService;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,24 +31,15 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional
-    public Invoice insert(InvoiceRequest invoiceRequest) {
-        try {
-            userService
-                    .findById(invoiceRequest.getUser())
-                    .ifPresentOrElse(
-                            user ->
-                                    registerCheckAndUpdateBalance(
-                                            invoiceRequest.getUser(), invoiceRequest.getValue()),
-                            Exception::new);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public InvoiceResponse insert(InvoiceRequest invoiceRequest) {
+        UserResponse user = userService.findById(invoiceRequest.getUser());
+        registerCheckAndUpdateBalance(user.getId(), invoiceRequest.getValue());
         Invoice invoice = saveInvoice(invoiceRequest);
         log.info(
                 "Created invoice number {}, for user {}.",
                 invoice.getNumber(),
                 invoice.getUserId());
-        return invoice;
+        return buildResponse(invoice);
     }
 
     private void registerCheckAndUpdateBalance(Integer user, Double value) {
@@ -62,12 +58,26 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public Optional<Invoice> findById(Integer invoiceId) {
-        return invoiceRepository.findById(invoiceId);
+    public InvoiceResponse findById(Integer invoiceId) {
+        return invoiceRepository
+                .findById(invoiceId)
+                .map(this::buildResponse)
+                .orElseThrow(() -> new NotFoundException(invoiceId.toString()));
     }
 
     @Override
-    public Iterable<Invoice> findAll() {
-        return invoiceRepository.findAll();
+    public List<InvoiceResponse> findAll() {
+        return StreamSupport.stream(invoiceRepository.findAll().spliterator(), false)
+                .map(this::buildResponse)
+                .collect(Collectors.toList());
+    }
+
+    private InvoiceResponse buildResponse(Invoice invoice) {
+        return InvoiceResponse.builder()
+                .id(invoice.getId())
+                .number(invoice.getNumber())
+                .userId(invoice.getUserId())
+                .createdAt(invoice.getCreatedAt())
+                .build();
     }
 }

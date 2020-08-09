@@ -1,5 +1,6 @@
 package com.ticket.example.resource;
 
+import com.ticket.example.aspect.annotation.LogExecutionTime;
 import com.ticket.example.resource.response.UserBalanceResponse;
 import com.ticket.example.service.UserBalanceService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class UserBalanceResource {
     private final UserBalanceService userBalanceService;
 
     @GetMapping(path = "/{userId}")
+    @LogExecutionTime
     UserBalanceResponse findById(@PathVariable(value = "userId") final Integer userId) {
         return userBalanceService.findByUser(userId);
     }

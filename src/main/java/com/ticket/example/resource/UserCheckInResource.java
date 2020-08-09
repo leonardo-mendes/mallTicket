@@ -1,5 +1,6 @@
 package com.ticket.example.resource;
 
+import com.ticket.example.aspect.annotation.LogExecutionTime;
 import com.ticket.example.resource.request.UserCheckInRequest;
 import com.ticket.example.resource.response.UserCheckInResponse;
 import com.ticket.example.service.UserCheckInService;
@@ -21,6 +22,7 @@ public class UserCheckInResource {
     private final UserCheckInService userCheckInService;
 
     @PostMapping("/between")
+    @LogExecutionTime
     List<UserCheckInResponse> findBetween(
             @Valid @RequestBody UserCheckInRequest userCheckInRequest) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

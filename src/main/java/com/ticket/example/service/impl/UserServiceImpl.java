@@ -6,13 +6,14 @@ import com.ticket.example.repository.UserRepository;
 import com.ticket.example.resource.request.UserRequest;
 import com.ticket.example.resource.response.UserResponse;
 import com.ticket.example.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
